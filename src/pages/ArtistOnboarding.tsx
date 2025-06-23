@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { Upload, X, User, Mail, MapPin, DollarSign, Star } from 'lucide-react';
+import { Upload, X, User, Mail, MapPin, DollarSign, Star, Camera, Languages } from 'lucide-react';
 
 interface FormData {
   name: string;
@@ -31,11 +31,19 @@ const skillOptions = {
   Comedians: ['Stand-up', 'Clean Comedy', 'Improv', 'Sketch Comedy', 'MC Services', 'Roast Comedy']
 };
 
+const languageOptions = [
+  'English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 
+  'Mandarin', 'Japanese', 'Korean', 'Arabic', 'Russian', 'Hindi'
+];
+
 const ArtistOnboarding = () => {
   const navigate = useNavigate();
   const { addSubmission } = useArtist();
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<FormData>();
@@ -52,10 +60,27 @@ const ArtistOnboarding = () => {
       return;
     }
 
+    if (selectedLanguages.length === 0) {
+      toast({
+        title: "Languages Required",
+        description: "Please select at least one language.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+
+      // Log submission to console as requested
+      console.log('Artist Onboarding Submission:', {
+        ...data,
+        skills: selectedSkills,
+        languages: selectedLanguages,
+        profileImage: profileImage?.name || 'No image uploaded'
+      });
 
       addSubmission({
         ...data,
@@ -93,8 +118,37 @@ const ArtistOnboarding = () => {
     );
   };
 
+  const toggleLanguage = (language: string) => {
+    setSelectedLanguages(prev => 
+      prev.includes(language) 
+        ? prev.filter(l => l !== language)
+        : [...prev, language]
+    );
+  };
+
   const removeSkill = (skill: string) => {
     setSelectedSkills(prev => prev.filter(s => s !== skill));
+  };
+
+  const removeLanguage = (language: string) => {
+    setSelectedLanguages(prev => prev.filter(l => l !== language));
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setProfileImage(null);
+    setImagePreview('');
   };
 
   return (
@@ -168,6 +222,50 @@ const ArtistOnboarding = () => {
                 </div>
               </div>
 
+              {/* Profile Image Upload */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <Camera className="w-5 h-5 mr-2" />
+                  Profile Image (Optional)
+                </h3>
+
+                <div className="space-y-4">
+                  {!imagePreview ? (
+                    <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center">
+                      <Upload className="w-12 h-12 mx-auto text-slate-400 mb-4" />
+                      <div className="space-y-2">
+                        <Label htmlFor="image-upload" className="cursor-pointer text-purple-600 hover:text-purple-700">
+                          Click to upload profile image
+                        </Label>
+                        <p className="text-sm text-slate-500">PNG, JPG up to 5MB</p>
+                      </div>
+                      <Input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </div>
+                  ) : (
+                    <div className="relative inline-block">
+                      <img 
+                        src={imagePreview} 
+                        alt="Profile preview" 
+                        className="w-32 h-32 object-cover rounded-lg border"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Professional Information */}
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-slate-800 flex items-center">
@@ -237,6 +335,51 @@ const ArtistOnboarding = () => {
                   />
                   {errors.description && (
                     <p className="text-sm text-red-600">{errors.description.message}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Languages Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-slate-800 flex items-center">
+                  <Languages className="w-5 h-5 mr-2" />
+                  Languages Spoken *
+                </h3>
+                
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {languageOptions.map(language => (
+                      <div key={language} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={language}
+                          checked={selectedLanguages.includes(language)}
+                          onCheckedChange={() => toggleLanguage(language)}
+                        />
+                        <Label htmlFor={language} className="text-sm cursor-pointer">
+                          {language}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+
+                  {selectedLanguages.length > 0 && (
+                    <div className="space-y-2">
+                      <Label>Selected Languages:</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedLanguages.map(language => (
+                          <Badge key={language} variant="secondary" className="pr-1">
+                            {language}
+                            <button
+                              type="button"
+                              onClick={() => removeLanguage(language)}
+                              className="ml-1 hover:text-red-600"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
