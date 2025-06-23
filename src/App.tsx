@@ -11,6 +11,8 @@ import Index from "./pages/Index";
 import ArtistListing from "./pages/ArtistListing";
 import ArtistOnboarding from "./pages/ArtistOnboarding";
 import ManagerDashboard from "./pages/ManagerDashboard";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,15 +25,26 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50">
-            <Navbar />
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/artists" element={<ArtistListing />} />
-              <Route path="/onboarding" element={<ArtistOnboarding />} />
-              <Route path="/dashboard" element={<ManagerDashboard />} />
-              <Route path="*" element={<NotFound />} />
+              {/* Routes without navbar/footer */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              
+              {/* Routes with navbar/footer */}
+              <Route path="/*" element={
+                <>
+                  <Navbar />
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/artists" element={<ArtistListing />} />
+                    <Route path="/onboarding" element={<ArtistOnboarding />} />
+                    <Route path="/dashboard" element={<ManagerDashboard />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                  <Footer />
+                </>
+              } />
             </Routes>
-            <Footer />
           </div>
         </BrowserRouter>
       </ArtistProvider>

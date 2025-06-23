@@ -44,10 +44,19 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
-            <Button size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
-              <User className="w-4 h-4 mr-2" />
-              Sign In
-            </Button>
+            <div className="flex items-center space-x-3">
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/login">
+                  Sign In
+                </Link>
+              </Button>
+              <Button asChild size="sm" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                <Link to="/signup">
+                  <User className="w-4 h-4 mr-2" />
+                  Sign Up
+                </Link>
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Navigation */}
@@ -74,10 +83,19 @@ const Navbar = () => {
                       {item.name}
                     </Link>
                   ))}
-                  <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 mt-4">
-                    <User className="w-4 h-4 mr-2" />
-                    Sign In
-                  </Button>
+                  <div className="flex flex-col space-y-2 pt-4 border-t">
+                    <Button asChild variant="ghost" onClick={() => setIsOpen(false)}>
+                      <Link to="/login">
+                        Sign In
+                      </Link>
+                    </Button>
+                    <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700" onClick={() => setIsOpen(false)}>
+                      <Link to="/signup">
+                        <User className="w-4 h-4 mr-2" />
+                        Sign Up
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
