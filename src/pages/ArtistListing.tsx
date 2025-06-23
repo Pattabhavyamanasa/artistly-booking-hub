@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Search, MapPin, Star, User } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Search, MapPin, Star, Calendar, Mail, Phone } from 'lucide-react';
 
 const ArtistListing = () => {
   const { artists } = useArtist();
@@ -159,10 +160,54 @@ const ArtistListing = () => {
                     </div>
                     <div className="text-sm text-slate-500">per event</div>
                   </div>
-                  <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
-                    <User className="w-4 h-4 mr-2" />
-                    Contact
-                  </Button>
+                  
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Book Event
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-white">
+                      <DialogHeader>
+                        <DialogTitle>Book {artist.name}</DialogTitle>
+                        <DialogDescription>
+                          Contact details to book this artist for your event
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <Mail className="w-5 h-5 text-purple-600" />
+                          <div>
+                            <p className="font-medium">Email</p>
+                            <p className="text-slate-600">{artist.name.toLowerCase().replace(' ', '.')}@artistly.com</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <Phone className="w-5 h-5 text-purple-600" />
+                          <div>
+                            <p className="font-medium">Phone</p>
+                            <p className="text-slate-600">+1 (555) {Math.floor(Math.random() * 900) + 100}-{Math.floor(Math.random() * 9000) + 1000}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <MapPin className="w-5 h-5 text-purple-600" />
+                          <div>
+                            <p className="font-medium">Location</p>
+                            <p className="text-slate-600">{artist.location}</p>
+                          </div>
+                        </div>
+                        <div className="bg-slate-50 p-4 rounded-lg">
+                          <p className="text-sm text-slate-600">
+                            <strong>Event Rate:</strong> ${artist.price} per event
+                          </p>
+                          <p className="text-sm text-slate-600 mt-1">
+                            Contact {artist.name} directly to discuss your event requirements and availability.
+                          </p>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </CardContent>
             </Card>
