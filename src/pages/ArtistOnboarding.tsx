@@ -8,28 +8,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { Upload, X, User, Mail, MapPin, DollarSign, Star, Camera, Languages } from 'lucide-react';
+import { Upload, X, User, Mail, MapPin, DollarSign, Star, Camera, Languages, ChevronDown } from 'lucide-react';
 
 interface FormData {
   name: string;
   email: string;
-  category: string;
   location: string;
   price: number;
   description: string;
   experience: string;
 }
 
-const skillOptions = {
-  Singers: ['Jazz', 'Pop', 'Rock', 'Classical', 'R&B', 'Country', 'Musical Theater', 'Wedding Songs'],
-  DJs: ['Wedding DJ', 'Corporate Events', 'Club Music', 'Electronic', 'Hip Hop', 'Sound Systems', 'MC Services'],
-  Dancers: ['Ballet', 'Jazz', 'Hip Hop', 'Contemporary', 'Ballroom', 'Latin', 'Tap', 'Cultural'],
-  Comedians: ['Stand-up', 'Clean Comedy', 'Improv', 'Sketch Comedy', 'MC Services', 'Roast Comedy']
-};
+const categoryOptions = ['Singers', 'DJs', 'Dancers', 'Comedians'];
 
 const languageOptions = [
   'English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 
@@ -39,22 +33,19 @@ const languageOptions = [
 const ArtistOnboarding = () => {
   const navigate = useNavigate();
   const { addSubmission } = useArtist();
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<FormData>();
-
-  const categoryValue = watch('category');
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    if (selectedSkills.length === 0) {
+    if (selectedCategories.length === 0) {
       toast({
-        title: "Skills Required",
-        description: "Please select at least one skill.",
+        title: "Category Required",
+        description: "Please select at least one category.",
         variant: "destructive"
       });
       return;
@@ -72,19 +63,19 @@ const ArtistOnboarding = () => {
     setIsSubmitting(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Log submission to console as requested
       console.log('Artist Onboarding Submission:', {
         ...data,
-        skills: selectedSkills,
+        categories: selectedCategories,
         languages: selectedLanguages,
         profileImage: profileImage?.name || 'No image uploaded'
       });
 
       addSubmission({
         ...data,
-        skills: selectedSkills
+        category: selectedCategories.join(', '),
+        skills: selectedCategories
       });
 
       toast({
@@ -104,17 +95,11 @@ const ArtistOnboarding = () => {
     }
   };
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    setValue('category', category);
-    setSelectedSkills([]); // Reset skills when category changes
-  };
-
-  const toggleSkill = (skill: string) => {
-    setSelectedSkills(prev => 
-      prev.includes(skill) 
-        ? prev.filter(s => s !== skill)
-        : [...prev, skill]
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
     );
   };
 
@@ -126,8 +111,8 @@ const ArtistOnboarding = () => {
     );
   };
 
-  const removeSkill = (skill: string) => {
-    setSelectedSkills(prev => prev.filter(s => s !== skill));
+  const removeCategory = (category: string) => {
+    setSelectedCategories(prev => prev.filter(c => c !== category));
   };
 
   const removeLanguage = (language: string) => {
@@ -220,6 +205,19 @@ const ArtistOnboarding = () => {
                     <p className="text-sm text-red-600">{errors.location.message}</p>
                   )}
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description">Bio & Description *</Label>
+                  <Textarea
+                    id="description"
+                    {...register('description', { required: 'Description is required' })}
+                    placeholder="Tell us about your performance style, experience, and what makes you unique..."
+                    rows={4}
+                  />
+                  {errors.description && (
+                    <p className="text-sm text-red-600">{errors.description.message}</p>
+                  )}
+                </div>
               </div>
 
               {/* Profile Image Upload */}
@@ -273,26 +271,54 @@ const ArtistOnboarding = () => {
                   Professional Information
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="category">Performance Category *</Label>
-                    <Select onValueChange={handleCategoryChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your category" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white">
-                        {Object.keys(skillOptions).map(category => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.category && (
-                      <p className="text-sm text-red-600">{errors.category.message}</p>
-                    )}
-                  </div>
+                {/* Category Multi-Select Dropdown */}
+                <div className="space-y-2">
+                  <Label>Performance Category *</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-between">
+                        {selectedCategories.length > 0 
+                          ? `${selectedCategories.length} selected` 
+                          : "Select categories"
+                        }
+                        <ChevronDown className="h-4 w-4 opacity-50" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full bg-white border shadow-lg z-50">
+                      {categoryOptions.map(category => (
+                        <DropdownMenuCheckboxItem
+                          key={category}
+                          checked={selectedCategories.includes(category)}
+                          onCheckedChange={() => toggleCategory(category)}
+                        >
+                          {category}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
+                  {selectedCategories.length > 0 && (
+                    <div className="space-y-2 mt-2">
+                      <Label>Selected Categories:</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedCategories.map(category => (
+                          <Badge key={category} variant="secondary" className="pr-1">
+                            {category}
+                            <button
+                              type="button"
+                              onClick={() => removeCategory(category)}
+                              className="ml-1 hover:text-red-600"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="price">Rate per Event ($) *</Label>
                     <Input
@@ -308,34 +334,23 @@ const ArtistOnboarding = () => {
                       <p className="text-sm text-red-600">{errors.price.message}</p>
                     )}
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="experience">Years of Experience *</Label>
-                  <Select onValueChange={(value) => setValue('experience', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select experience level" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="1-2 years">1-2 years</SelectItem>
-                      <SelectItem value="3-5 years">3-5 years</SelectItem>
-                      <SelectItem value="6-10 years">6-10 years</SelectItem>
-                      <SelectItem value="10+ years">10+ years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Bio & Description *</Label>
-                  <Textarea
-                    id="description"
-                    {...register('description', { required: 'Description is required' })}
-                    placeholder="Tell us about your performance style, experience, and what makes you unique..."
-                    rows={4}
-                  />
-                  {errors.description && (
-                    <p className="text-sm text-red-600">{errors.description.message}</p>
-                  )}
+                  <div className="space-y-2">
+                    <Label htmlFor="experience">Years of Experience *</Label>
+                    <select
+                      {...register('experience', { required: 'Experience is required' })}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
+                      <option value="">Select experience level</option>
+                      <option value="1-2 years">1-2 years</option>
+                      <option value="3-5 years">3-5 years</option>
+                      <option value="6-10 years">6-10 years</option>
+                      <option value="10+ years">10+ years</option>
+                    </select>
+                    {errors.experience && (
+                      <p className="text-sm text-red-600">{errors.experience.message}</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -347,20 +362,28 @@ const ArtistOnboarding = () => {
                 </h3>
                 
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {languageOptions.map(language => (
-                      <div key={language} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={language}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-between">
+                        {selectedLanguages.length > 0 
+                          ? `${selectedLanguages.length} selected` 
+                          : "Select languages"
+                        }
+                        <ChevronDown className="h-4 w-4 opacity-50" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full bg-white border shadow-lg z-50 max-h-60 overflow-y-auto">
+                      {languageOptions.map(language => (
+                        <DropdownMenuCheckboxItem
+                          key={language}
                           checked={selectedLanguages.includes(language)}
                           onCheckedChange={() => toggleLanguage(language)}
-                        />
-                        <Label htmlFor={language} className="text-sm cursor-pointer">
+                        >
                           {language}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
                   {selectedLanguages.length > 0 && (
                     <div className="space-y-2">
@@ -383,50 +406,6 @@ const ArtistOnboarding = () => {
                   )}
                 </div>
               </div>
-
-              {/* Skills Section */}
-              {selectedCategory && (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-semibold text-slate-800">Skills & Specialties *</h3>
-                  
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {skillOptions[selectedCategory as keyof typeof skillOptions]?.map(skill => (
-                        <div key={skill} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={skill}
-                            checked={selectedSkills.includes(skill)}
-                            onCheckedChange={() => toggleSkill(skill)}
-                          />
-                          <Label htmlFor={skill} className="text-sm cursor-pointer">
-                            {skill}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-
-                    {selectedSkills.length > 0 && (
-                      <div className="space-y-2">
-                        <Label>Selected Skills:</Label>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedSkills.map(skill => (
-                            <Badge key={skill} variant="secondary" className="pr-1">
-                              {skill}
-                              <button
-                                type="button"
-                                onClick={() => removeSkill(skill)}
-                                className="ml-1 hover:text-red-600"
-                              >
-                                <X className="w-3 h-3" />
-                              </button>
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
 
               {/* Submit Button */}
               <div className="pt-6">

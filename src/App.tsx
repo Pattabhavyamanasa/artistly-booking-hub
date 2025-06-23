@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import ArtistListing from "./pages/ArtistListing";
 import ArtistOnboarding from "./pages/ArtistOnboarding";
 import ManagerDashboard from "./pages/ManagerDashboard";
+import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
                     <Route path="/artists" element={<ArtistListing />} />
                     <Route path="/onboarding" element={<ArtistOnboarding />} />
                     <Route path="/dashboard" element={<ManagerDashboard />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                   <Footer />
