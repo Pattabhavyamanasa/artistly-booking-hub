@@ -12,16 +12,36 @@ interface Artist {
   image: string;
 }
 
+interface Submission {
+  id: string;
+  name: string;
+  email: string;
+  category: string;
+  skills: string[];
+  location: string;
+  price: number;
+  description: string;
+  submittedAt: string;
+}
+
 interface ArtistContextProps {
   artists: Artist[];
+  submissions: Submission[];
+  addSubmission: (submission: Omit<Submission, 'id' | 'submittedAt'>) => void;
 }
 
 const ArtistContext = createContext<ArtistContextProps>({
   artists: [],
+  submissions: [],
+  addSubmission: () => {},
 });
 
 const useArtist = () => {
-  return useContext(ArtistContext);
+  const context = useContext(ArtistContext);
+  if (!context) {
+    throw new Error('useArtist must be used within an ArtistProvider');
+  }
+  return context;
 };
 
 const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -138,8 +158,21 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
     }
   ]);
 
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+
+  const addSubmission = (submissionData: Omit<Submission, 'id' | 'submittedAt'>) => {
+    const newSubmission: Submission = {
+      ...submissionData,
+      id: Math.random().toString(36).substr(2, 9),
+      submittedAt: new Date().toISOString(),
+    };
+    setSubmissions(prev => [...prev, newSubmission]);
+  };
+
   const value = {
-    artists
+    artists,
+    submissions,
+    addSubmission
   };
 
   return (
