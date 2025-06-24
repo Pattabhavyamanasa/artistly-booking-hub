@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
+import { Facebook, Google } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Signup = () => {
@@ -64,6 +64,14 @@ const Signup = () => {
     }, 1000);
   };
 
+  const handleSocialSignup = (provider: string) => {
+    toast({
+      title: `${provider} Sign Up`,
+      description: `Redirecting to ${provider} authentication...`
+    });
+    // In a real app, this would redirect to the OAuth provider
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -89,7 +97,36 @@ const Signup = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Social Sign Up Buttons */}
+            <div className="space-y-3 mb-6">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => handleSocialSignup('Google')}
+              >
+                <Google className="w-4 h-4 mr-2" />
+                Continue with Google
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => handleSocialSignup('Facebook')}
+              >
+                <Facebook className="w-4 h-4 mr-2" />
+                Continue with Facebook
+              </Button>
+            </div>
+
+            <div className="relative">
+              <Separator className="my-4" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="bg-white px-2 text-sm text-slate-500">Or continue with email</span>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4 mt-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="firstName">First Name</Label>
@@ -200,7 +237,6 @@ const Signup = () => {
             </form>
 
             <div className="mt-6">
-              <Separator className="my-4" />
               <div className="text-center text-sm text-slate-600">
                 By signing up, you agree to our{' '}
                 <Link to="#" className="text-purple-600 hover:text-purple-500">

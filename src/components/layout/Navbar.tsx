@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,8 +12,7 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'Find Artists', path: '/artists' },
     { name: 'Join as Artist', path: '/onboarding' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Contact', path: '/contact' }
+    { name: 'Dashboard', path: '/dashboard' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
