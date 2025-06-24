@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { useArtist } from '@/contexts/ArtistContext';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,15 +8,19 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Search, MapPin, Star, Calendar, Mail, Phone, Grid, List } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import QuoteRequestForm from '@/components/QuoteRequestForm';
 
 const ArtistListing = () => {
   const { artists } = useArtist();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [locationFilter, setLocationFilter] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('name');
+  const [selectedArtist, setSelectedArtist] = useState<string | null>(null);
 
   const filteredArtists = useMemo(() => {
     return artists.filter(artist => {
@@ -48,6 +51,18 @@ const ArtistListing = () => {
     } else {
       setSelectedCategories(selectedCategories.filter(c => c !== category));
     }
+  };
+
+  const handleQuoteRequest = async (data: any) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast({
+      title: "Quote Request Sent!",
+      description: `Your quote request has been sent to ${selectedArtist}. They will contact you within 24 hours.`,
+    });
+    
+    setSelectedArtist(null);
   };
 
   return (
@@ -233,46 +248,22 @@ const ArtistListing = () => {
                             <span className="font-semibold text-slate-800">${artist.price}</span> per event
                           </div>
                           
-                          <Dialog>
+                          <Dialog open={selectedArtist === artist.name} onOpenChange={(open) => !open && setSelectedArtist(null)}>
                             <DialogTrigger asChild>
                               <Button 
                                 size="sm"
                                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                                onClick={() => setSelectedArtist(artist.name)}
                               >
                                 Ask for Quote
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="bg-white">
-                              <DialogHeader>
-                                <DialogTitle>Contact {artist.name}</DialogTitle>
-                                <DialogDescription>
-                                  Get in touch to discuss your event requirements
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div className="space-y-4">
-                                <div className="flex items-center space-x-3">
-                                  <Mail className="w-5 h-5 text-purple-600" />
-                                  <div>
-                                    <p className="font-medium">Email</p>
-                                    <p className="text-slate-600">{artist.name.toLowerCase().replace(' ', '.')}@artistly.com</p>
-                                  </div>
-                                </div>
-                                <div className="flex items-center space-x-3">
-                                  <Phone className="w-5 h-5 text-purple-600" />
-                                  <div>
-                                    <p className="font-medium">Phone</p>
-                                    <p className="text-slate-600">+1 (555) {Math.floor(Math.random() * 900) + 100}-{Math.floor(Math.random() * 9000) + 1000}</p>
-                                  </div>
-                                </div>
-                                <div className="bg-slate-50 p-4 rounded-lg">
-                                  <p className="text-sm text-slate-600">
-                                    <strong>Starting Rate:</strong> ${artist.price} per event
-                                  </p>
-                                  <p className="text-sm text-slate-600 mt-1">
-                                    Contact {artist.name} to discuss your specific requirements and get a personalized quote.
-                                  </p>
-                                </div>
-                              </div>
+                            <DialogContent className="bg-white max-w-4xl max-h-[90vh] overflow-y-auto">
+                              <QuoteRequestForm
+                                artistName={artist.name}
+                                onSubmit={handleQuoteRequest}
+                                onCancel={() => setSelectedArtist(null)}
+                              />
                             </DialogContent>
                           </Dialog>
                         </div>
