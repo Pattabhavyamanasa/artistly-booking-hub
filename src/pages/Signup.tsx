@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
-import { Facebook, Google } from 'lucide-react';
+import { Facebook } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Signup = () => {
@@ -105,7 +106,7 @@ const Signup = () => {
                 className="w-full"
                 onClick={() => handleSocialSignup('Google')}
               >
-                <Google className="w-4 h-4 mr-2" />
+                <Mail className="w-4 h-4 mr-2" />
                 Continue with Google
               </Button>
               <Button
