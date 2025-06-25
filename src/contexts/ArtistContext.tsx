@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState } from 'react';
 
 interface Artist {
@@ -55,7 +56,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Downtown, Los Angeles',
       price: 800,
       rating: 4.9,
-      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
     {
       id: '2',
@@ -66,7 +67,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Beverly Hills, CA',
       price: 600,
       rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1494790108755-2616c9c61c6d?w=400&h=300&fit=crop'
     },
     {
       id: '3',
@@ -77,7 +78,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'West Hollywood, CA',
       price: 1200,
       rating: 4.9,
-      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
     },
     {
       id: '4',
@@ -155,6 +156,39 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       price: 650,
       rating: 4.9,
       image: 'https://images.unsplash.com/photo-1526666934485-c91f45c6596f?w=400&h=300&fit=crop'
+    },
+    {
+      id: '11',
+      name: 'Comedy Central',
+      category: 'Comedian',
+      description: 'Stand-up comedian specializing in corporate events and private parties.',
+      skills: ['Stand-up Comedy', 'Improv', 'Corporate Entertainment'],
+      location: 'West Hollywood, CA',
+      price: 750,
+      rating: 4.8,
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop'
+    },
+    {
+      id: '12',
+      name: 'Dance Revolution',
+      category: 'Dancer',
+      description: 'Professional dance troupe performing contemporary and hip-hop choreography.',
+      skills: ['Hip Hop', 'Contemporary', 'Jazz Dance'],
+      location: 'Downtown, Los Angeles',
+      price: 600,
+      rating: 4.7,
+      image: 'https://images.unsplash.com/photo-1547153760-18fc86324498?w=400&h=300&fit=crop'
+    },
+    {
+      id: '13',
+      name: 'Ballroom Elegance',
+      category: 'Dancer',
+      description: 'Classical ballroom dancers perfect for elegant events and demonstrations.',
+      skills: ['Ballroom', 'Latin Dance', 'Waltz'],
+      location: 'Beverly Hills, CA',
+      price: 800,
+      rating: 4.9,
+      image: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400&h=300&fit=crop'
     }
   ]);
 
