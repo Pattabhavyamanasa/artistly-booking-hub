@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from 'react';
 
 interface Artist {
@@ -89,7 +88,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Santa Monica, CA',
       price: 500,
       rating: 4.7,
-      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=300&fit=crop'
     },
     {
       id: '5',
@@ -111,7 +110,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Venice, CA',
       price: 550,
       rating: 4.5,
-      image: 'https://images.unsplash.com/photo-1547948803-dca99b5b1e75?w=400&h=300&fit=crop&crop=face'
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=300&fit=crop&crop=face'
     },
     {
       id: '7',
@@ -122,7 +121,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Pasadena, CA',
       price: 1100,
       rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?w=400&h=300&fit=crop'
     },
     {
       id: '8',
@@ -133,7 +132,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Long Beach, CA',
       price: 700,
       rating: 4.7,
-      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=300&fit=crop'
     },
     {
       id: '9',
@@ -144,7 +143,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Culver City, CA',
       price: 850,
       rating: 4.6,
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&crop=face'
     },
     {
       id: '10',
