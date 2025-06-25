@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState } from 'react';
 
 interface Artist {
@@ -55,7 +56,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Downtown, Los Angeles',
       price: 800,
       rating: 4.9,
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=face'
     },
     {
       id: '2',
@@ -66,7 +67,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Beverly Hills, CA',
       price: 600,
       rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1494790108755-2616c9c61c6d?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1494790108755-2616c9c61c6d?w=400&h=300&fit=crop&crop=face'
     },
     {
       id: '3',
@@ -88,7 +89,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Santa Monica, CA',
       price: 500,
       rating: 4.7,
-      image: 'https://images.unsplash.com/photo-1543760749-5d355a419c21?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=300&fit=crop'
     },
     {
       id: '5',
@@ -99,7 +100,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Hollywood, CA',
       price: 900,
       rating: 4.6,
-      image: 'https://images.unsplash.com/photo-1584231010874-1c4429834914?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1520872084946-2de6f32e0158?w=400&h=300&fit=crop'
     },
     {
       id: '6',
@@ -110,7 +111,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Venice, CA',
       price: 550,
       rating: 4.5,
-      image: 'https://images.unsplash.com/photo-1547948803-dca99b5b1e75?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1547948803-dca99b5b1e75?w=400&h=300&fit=crop&crop=face'
     },
     {
       id: '7',
@@ -121,7 +122,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Pasadena, CA',
       price: 1100,
       rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1576766491415-0744c46c4413?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
     },
     {
       id: '8',
@@ -132,7 +133,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Long Beach, CA',
       price: 700,
       rating: 4.7,
-      image: 'https://images.unsplash.com/photo-1605492484344-4494272144d1?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop'
     },
     {
       id: '9',
@@ -143,7 +144,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'Culver City, CA',
       price: 850,
       rating: 4.6,
-      image: 'https://images.unsplash.com/photo-1541424443423-f35936ca9623?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop'
     },
     {
       id: '10',
@@ -165,7 +166,7 @@ const ArtistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
       location: 'West Hollywood, CA',
       price: 750,
       rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop'
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=face'
     },
     {
       id: '12',
